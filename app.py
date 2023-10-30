@@ -1,21 +1,13 @@
-import streamlit as st
+from flask import Flask, render_template, request
+app = Flask(__name__)
 
-st.set_page_config("ECOP06")
+# Rota: HOME ou Principal
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    nome = None
+    if request.method == 'POST' and 'nome' in request.form:
+        nome = request.form['nome']
+    return render_template('index.html', nome=nome)
 
-st.title("Aula de ECOP06")
-
-st.subheader("Felipão CAlvão Loirão")
-
-
-st.markdown('''
-# Unidos por uma causa
-''')
-
-st.image('https://media.licdn.com/dms/image/C4E03AQGFCM6GTwwpHg/profile-displayphoto-shrink_800_800/0/1654196983646?e=2147483647&v=beta&t=BsqsYoeetMZzx6XfE8udGPJNr0HMSDpUyTU3XjcNj6U')
-
-st.image('https://www.lance.com.br/galerias/wp-content/uploads/2021/10/memes-santos-na-zona-de-rebaixamento-9-667x474.jpg')
-
-st.image('https://github.com/valerio-unifei.png')
-
-if st.button('Pressione aqui'):
-    st.text("Santos Série B 2023")
+if __name__ == "main":
+    app.run(debug=True)
