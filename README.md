@@ -1,155 +1,71 @@
-# Aplicação Web pelo Framework Flask
+# Web Scraping
+Web scraping é uma técnica de coleta de dados usada para extrair informações de sites da web. Isso é feito de maneira automatizada, por meio de programas de computador (ou scripts) que acessam páginas da web, fazem o download do seu conteúdo e extraem os dados desejados. Esses dados podem incluir texto, imagens, links, informações de produtos, preços, classificações, notícias e muito mais.
 
-### Guia de valerio-unifei
+O processo de web scraping envolve normalmente os seguintes passos:
+1. Acesso à página web: Um programa de web scraping faz uma solicitação a um servidor web para acessar uma página da web específica.
+2. Download de conteúdo: O programa faz o download do conteúdo HTML da página da web. O HTML é a linguagem de marcação usada para criar páginas da web e contém todas as informações estruturadas da página.
+3. Análise do HTML: O programa analisa o HTML para identificar os elementos da página que contêm os dados desejados, como tags HTML, classes CSS ou IDs.
+4. Extração de dados: Os dados relevantes são extraídos desses elementos HTML identificados. Isso pode envolver a extração de texto, links, imagens ou qualquer outro tipo de informação presente na página.
+5. Armazenamento ou processamento dos dados: Os dados extraídos podem ser armazenados em um banco de dados, planilha ou outro formato de arquivo, ou então podem ser processados e usados para diversos fins, como análises, comparações, agregações ou exibição em um site ou aplicativo.
 
-O Flask é um framework web em Python que é amplamente utilizado para o desenvolvimento de aplicativos web e APIs de forma rápida e simples. Criado por Armin Ronacher, o Flask é conhecido por sua simplicidade e facilidade de uso, sendo uma escolha popular entre desenvolvedores para projetos de todos os tamanhos.
+Web scraping é usado em uma variedade de aplicações, incluindo monitoramento de preços de produtos, agregação de informações para análises de mercado, coleta de dados para pesquisa acadêmica, obtenção de informações para fins jornalísticos, entre outros. 
 
-Pontos-chave sobre o Flask:
-1. Micro Framework: O Flask é muitas vezes referido como um "micro framework" porque oferece apenas o conjunto mínimo de ferramentas necessárias para criar aplicativos web, deixando grande parte da arquitetura e decisões de design para os desenvolvedores. Isso dá aos desenvolvedores a liberdade de escolher as bibliotecas e ferramentas que desejam usar em seus projetos.
-2. Simplicidade: Uma das principais características do Flask é sua simplicidade. Ele possui uma API limpa e fácil de entender, o que o torna uma excelente escolha para iniciantes e para desenvolvedores que desejam criar aplicativos rapidamente.
-3. Extensibilidade: Embora seja um micro framework, o Flask é altamente extensível. Você pode adicionar funcionalidades extras ao seu aplicativo usando extensões que fornecem recursos como autenticação, manipulação de formulários, integração de bancos de dados, e muito mais.
-4. Werkzeug e Jinja2: Flask se baseia no Werkzeug, que é uma biblioteca WSGI (Web Server Gateway Interface) para manipulação de solicitações HTTP, e no Jinja2, um mecanismo de template que facilita a criação de páginas da web dinâmicas.
-5. Roteamento flexível: Flask oferece um sistema de roteamento flexível que permite mapear URLs para funções Python, tornando fácil a criação de endpoints para diferentes partes do seu aplicativo.
-6. Desenvolvimento e depuração simplificados: O Flask possui uma ferramenta de depuração embutida que ajuda a identificar e corrigir erros durante o desenvolvimento. Além disso, é adequado para ambientes de desenvolvimento e produção.
-7. Comunidade ativa: Flask tem uma comunidade ativa e uma ampla gama de recursos, incluindo tutoriais, documentação e extensões de terceiros, o que facilita o desenvolvimento de aplicativos robustos.
+**No entanto, é importante notar que o web scraping deve ser realizado de forma ética e respeitando os termos de uso do site alvo, uma vez que seu uso indevido pode infringir direitos autorais ou violar políticas de privacidade.**
 
-## Ambiente Virtual
+## Crie o Ambiente Virtual
+Use o guia das outras aulas aqui.
 
-Toda aplicação web precisa de um ambiente isolado para desenvolvimento que não interfira as outras instalações ou programas Python desenvolvidos na máquina de execução, por isso a necessidade da criação de um ambiente virtual.
-
-Segue os passos para essa criação:
-1. Crie uma pasta em um local do computador com permissão de escrita ou leitura (pode ser um pendrive);
-2. Abra o VSCode e solicite abrir essa pasta;
-3. Abra o terminal do VSCode;
-4. Execute o comando: ``` python -m venv venv ```
-5. Aguarde a criação da pasta "venv" no projeto;
-6. Execute o ambiente virtual ``` ./venv/Scripts/activate ```
-7. Mude o interpretador Python para o ambiente virtual no VSCode
-8. Deverá aparecer **Python 3.10.12 (venv)**
-
-## Instalando bibliotecas no Ambiente Virtual
-```
-(venv): pip install flask flask-sqlalchemy flask-login
+## Instalando Bibliotecas
+```console
+(venv): pip install requests pandas bs4 openpyxl Flask
 ```
 
-## Aplicação Teste
+## Realizando a Extração dos dados
 
-Crie um arquivo app1.py com o seguinte código:
-
-```
-from flask import Flask
-# cria a aplicação Flask
-app = Flask(__name__)
-
-# endereço raiz do site
-@app.route('/')
-def index():
-    return "<h1>Olá UNIFEI!</h1>"
-
-# endereço do usuário do site
-@app.route('/usuario/<nome>')
-def usuario(nome):
-	return '<h1>Olá, {0}!</h1>'.format(nome)
-
-# executando o servido de página 
-app.run(debug=True)
-```
-
-Execute o arquivo.
-
-Conceitos apresentados:
-1. O que são rotas de URL?
-2. O uso de "decorators" nas funções
-3. Parâmetros de rotas
-4. HTML
-
-## Modelos HTML
-
-Crie uma pasta "templates" no projeto e coloque o seguintes arquivos:
-
-*index.html*
-```
-<h1>Hello World!</h1>
-```
-
-*usuario.html*
-```
-<h1>Hello, {{nome}}!</h1>
-```
-
-Crie um arquivo "app2.py" com:
-```
-from flask import Flask, render_template
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-  return render_template('index.html')
-
-@app.route('/usuario/<nome>')
-def usuario(nome):
-  return render_template('usuario.html', nome=nome)
-
-app.run(debug=True)
-```
-
-Execute.
-
-## Formulário de Dados de Entrada
-
-Modifique o arquivo *index.html* na pasta "templates":
-
-```html
-<!DOCTYPE HTML>
-<html>
-  <head>
-    <title>UNIFEI-Flask</title>
-  </head>
-  <body>
-    <form method="POST" action="">
-      Qual é seu nome? <input type="text" name="nome">
-      <input type="submit" name="submit" value="Enviar">
-    </form>
-    {% if nome %}
-      <h1>Olá, {{nome}}!</h1>
-    {% endif %}
-  </body>
-</html>
-```
-
-Crie o "app3.py" com :
+Bibliotecas no código:
 ```python
-from flask import Flask, render_template, request
-app = Flask(__name__)
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    nome = None
-    if request.method == 'POST' and 'nome' in request.form:
-      nome = request.form['nome']
-    return render_template('index.html', nome=nome)
-
-if __name__ == '__main__'
-   app.run(debug=True)
+import requests
+from bs4 import BeautifulSoup
+from datetime import datetime
+import pandas as pd
 ```
 
+Site vasculhado: https://www.mercadolivre.com.br/ofertas?container_id=MLB779362-1&page=1
 
-### Bibliotecas e execução
-
-```console
-pip install flask gunicorn
+Extraíndo página do site:
+```python
+def ofertas(pagina:int):
+    # página de ofertas do mercado livre
+    URL = 'https://www.mercadolivre.com.br/ofertas?container_id=MLB779362-1&page=' + str(pagina)
+    response = requests.get(URL)
+    doc = BeautifulSoup(response.text,'html.parser')
+    if response.status_code != 200:
+        raise Exception('Problemas na URL: {0}'.format(response))
+    # nome do produto
+    produtos_tags = doc.find_all('p', class_ = 'promotion-item__title')
+    for tags in produtos_tags:
+        produtos.append(tags.text)
+    # preço do produto
+    valor_tags = doc.find_all('div', class_ = 'andes-money-amount-combo__main-container')
+    for tags in valor_tags:
+        valores.append(tags.text.replace('Â',''))
 ```
 
-Execute o código abaixo:
-```console
-gunicorn -w 4 "app:app"
+Processando extração de múltiplas páginas:
+```python
+for p in range(1,11):
+    print('Extraindo página', p)
+    ofertas(p)
+
+ml = pd.DataFrame({
+    'Produtos': produtos,
+    'Preços': valores,
+})
+
+ml['Preços'] = ml['Preços'].str.extract(r'(\d+[\.,]?\d*)')
+
+ml.to_csv('mercadolivre.csv',index=False)
 ```
 
-Conceitos apresentados aqui:
-1. Formulário e campos de entrada
-2. Rotas com comandos GET e POST
-3. Estruturas embutidas Python (Jinja2) no HTML
-
-# Gerar um site em produção
-Crie um repositório com o último projeto.
-Use o site [Render](render.com) para subir seu site on-line.
+## Proposta
+Crie um site em Flask que receba o número da página e entregue uma tabela com as ofertas ordenadas de forma crescente por valor.
