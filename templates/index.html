@@ -1,15 +1,84 @@
 <!DOCTYPE HTML>
 <html>
-  <head>
-    <title>UNIFEI-Flask</title>
-  </head>
-  <body>
-    <form method="POST" action="">
-      Qual é seu nome? <input type="text" name="nome">
-      <input type="submit" name="submit" value="Enviar">
-    </form>
-    {% if nome %}
-      <h1>Olá, {{nome}}!</h1>
-    {% endif %}
-  </body>
+
+<head>
+    <title>UNIFEI-OCR</title>
+    <style>
+        body {
+            margin: 0;
+            border: 0;
+            box-sizing: border-box;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            overflow-y: scroll;
+        }
+        .form {
+                width: 100%;
+                height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+
+            input,
+            button {
+                box-sizing: border-box;
+                border: none;
+                border-radius: 8px;
+                outline: none;
+                width: 300px; height: 50px; 
+            }
+
+            input {
+                padding:8px;
+            }
+
+            button {
+                margin-top: 24px;
+                background: #e06391;
+                border: 0;
+                color: #fff;
+                font-weight: bold;
+            }
+
+            .table-style {
+                position: relative;
+            }
+
+            th {
+                border: none;
+            }
+
+            tbody {
+                border: 2px solid #000;
+                border-spacing: 0;
+            }
+
+            tr {
+                border: 2px solid #000;
+            }
+
+            tr > td:first-child {
+                border-right: 0;
+            }
+            tr > td:last-child{
+                border-left: 0;
+            }
+    </style>
+</head>
+
+    <body>
+        <form method="POST" action="" class="form">
+            <input type="text" name="pagina" min='1' max='10' placeholder="Choose the page" style="background-color: #dfe6f9; border-radius: 8px;">
+            <button type="submit" name="submit" value="Enviar" >Send</button>
+        </form>
+        <div class="table-style">
+               {{tabela|safe}}
+        </div>
+    </body>
+
 </html>
